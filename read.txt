@@ -1,0 +1,74 @@
+    Project Documentation Outline
+A. General Project Description
+
+Project Name: Passenger Image Extraction & Customs Declaration App
+
+Goal:
+Build a modern web app for travelers to easily fill out customs declaration forms using photo capture, OCR (optical character recognition), and direct form submission. Images and data are saved locally and to S3, with email confirmation to the user.
+
+B. Task & Functionality Outline
+
+Image Capture
+
+User takes photos of passports & boarding passes or uploads images.
+
+Custom camera overlay (local/CV2 for now) guides proper image framing.
+
+OCR & Data Extraction
+
+OCR (Tesseract) extracts text from images.
+
+Data is cleaned, validated, and standardized.
+
+Prefill & Manual Edit
+
+Form fields pre-filled with extracted data.
+
+Users can edit/correct all information before final submission.
+
+Submission & Storage
+
+Data is saved as JSON locally and uploaded to S3.
+
+Confirmation number generated for each submission.
+
+Email Notification
+
+User receives an email confirmation with their details and reference number.
+
+C. How It Was Done
+
+OpenCV (cv2): Used for local camera overlays and advanced capture.
+
+Tesseract OCR: Extracts data from uploaded/captured images.
+
+AWS S3: Stores images and JSON data securely in the cloud.
+
+Python (modular): Code separated into classes and modules for image capture, OCR, data structuring, storage, and emailing.
+
+Git/GitHub: Full source control and remote backup.
+
+
+Python 3.9+
+
+Folder Structure
+
+├── ImageCaptureExtract/
+├── cloudStorageExtract/
+├── parsingTransform/
+├── processingTransform/
+├── submitLoad/
+├── utils.py
+├── config/
+└── ...
+
+
+.venv file
+SMTP_USER=your_email
+SMTP_PASS=your_password
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+
+Credits
+Built by Francisco Ostolaza.
+
