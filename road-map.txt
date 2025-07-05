@@ -1,0 +1,208 @@
+A. Updated Workflow (Step-by-step, Modern, Modular)
+User Journey & System Workflow
+1. Launch App
+
+App loads (Streamlit/UI)
+
+User chooses: Manual Entry or Smart Image Upload
+
+2. If Manual Entry:
+
+User fills form fields directly.
+
+On submit, data goes to step 6.
+
+3. If Smart Image Upload:
+
+User prompted for:
+
+Passport/ID (required)
+
+Boarding Pass 1 (required)
+
+Boarding Pass 2 (optional)
+
+For each document:
+
+Capture or upload image (guided cropping/overlay)
+
+Image pre-processing (resize, crop, binarize)
+
+Save raw + processed image to Cloud Storage (e.g., S3)
+
+4. Image Data Extraction
+
+For each uploaded doc:
+
+Object Detection (YOLOv8): Find key fields (e.g., name, DOB, MRZ)
+
+Crop fields and run OCR (Tesseract/EasyOCR)
+
+Output: JSON for each doc (raw extracted text & words)
+
+Save JSON to cloud
+
+5. Data Structuring & Prefill
+
+Parse/clean extracted fields (e.g., standardize “Surname”)
+
+Map to unified data schema (CBP Form 6059B fields)
+
+Store cleaned/passenger data as standardized JSON (local + cloud)
+
+Use as input for dynamic form prefill
+
+6. Dynamic User Form
+
+Prefilled fields shown to user for verification/editing
+
+Additional questions (family, address, declarations, signature)
+
+Validate all fields
+
+7. Submission
+
+On submit:
+
+Final data is structured into application JSON
+
+Save all data to DB (MongoDB/Firebase)
+
+Save images to Cloud
+
+Log submission (for audit)
+
+Generate confirmation number
+
+8. Notification
+
+Send confirmation email to user (SendGrid/SES)
+
+Send application to agency (API, email, or dashboard)
+
+
+[User Device / Web/Mobile UI]
+       |
+       v
+[1. Capture/Upload Image]
+       |
+       v
+[2. Backend API]
+   |         |           |
+   |         |           |
+[YOLOv8] [OpenCV]   [Tesseract OCR]
+   |         |           |
+   |---[Field Cropping/Preprocessing]---|
+                    |                  
+                    v
+          [3. Data Structuring/JSON]
+                    |
+                    v
+     [4. Prefill User Form + Extra Questions]
+                    |
+                    v
+           [Signature Capture]
+                    |
+                    v
+            [5. Submit Form]
+                    |
+                    v
+[6a. Store Data (MongoDB/Firebase)]
+[6b. Store Images (AWS S3/GCS)]
+[6c. Generate Confirmation #]
+[6d. Email to User (SendGrid/SES)]
+[6e. Submission to Agency (API/Email/Dashboard)]
+
+project-root/
+│
+├── main.py            # Entry point (or streamlit_app.py)
+│
+├── capture/           # All image capture + upload logic
+│   └── capture_image.py
+│   └── camera_overlay.py
+│
+├── processing/        # All image and OCR processing
+│   └── preprocess.py
+│   └── ocr_extract.py
+│   └── object_detection.py   # (YOLO)
+│
+├── parsing/           # Data structuring/cleaning
+│   └── data_structuring.py
+│
+├── forms/             # Form logic, prefill, user review
+│   └── prefill.py
+│   └── signature.py
+│
+├── submit/            # Submission logic
+│   └── submit_to_agency.py
+│   └── email_notify.py
+│   └── store_data.py
+│
+├── cloud/             # Cloud storage helpers (S3, GCS, etc)
+│   └── s3_utils.py
+│
+├── config/            # Environment/configuration files
+│   └── config.py
+│   └── .env
+│
+└── utils/             # Any shared helpers
+
+[Start: Launch App/Streamlit]
+        |
+        v
+[User Chooses Entry]
+    /         \
+[Manual]   [Image Upload]
+   |             |
+   |   [Image Capture + Preprocess]
+   |             |
+   |    [Object Detection + OCR]
+   |             |
+   |     [Data Cleaning/Structuring]
+   |             |
+   \---->[Form Prefill/Review]<---/
+              |
+       [Extra Questions, Signature]
+              |
+         [Submit]
+        /      \
+[Save to DB]  [Email/User/Agency]
+
+
+# Python dependencies for Travel-customs-PII
+flask
+fastapi
+streamlit
+opencv-python
+torch
+ultralytics
+tesseract
+easyocr
+pillow
+boto3
+google-cloud-storage
+pymongo
+firebase-admin
+sendgrid
+python-dotenv
+pyyaml
+
+
+# Travel-customs-PII
+
+Modular Python project for automated customs entry and declaration forms.
+
+## Main Modules
+- app.py – Main app runner and router
+- image_capture.py – Image upload/capture/preprocessing
+- object_detection.py – YOLO/OpenCV field detection
+- ocr_extraction.py – OCR on fields
+- data_structuring.py – Data cleaning, structuring, JSON
+- form_builder.py – Dynamic form with signature
+- cloud_storage.py – DB and cloud storage
+- notification.py – Email/confirmation
+- admin_dashboard.py – Admin review UI (optional)
+- utils.py – Helpers
+
+## Setup
+...

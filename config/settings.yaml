@@ -1,0 +1,22 @@
+# Example configuration for app secrets and environment settings
+
+
+database:
+  uri: "your_mongodb_uri"
+  name: "customs_declarations"
+
+cloud_storage:
+  provider: "aws"  # or "gcp"
+  aws_bucket: "ostolaza-project-image-bucket"
+  gcp_bucket: "your-bucket"
+
+email:
+  sendgrid_api_key: "your_sendgrid_key"
+  from_email: "noreply@yourdomain.com"
+  agency_email: "agency@customs.gov"
+
+ml_models:
+  yolo_weights_path: "models/yolov8.pt"
+  tesseract_cmd: "/usr/bin/tesseract"
+
+

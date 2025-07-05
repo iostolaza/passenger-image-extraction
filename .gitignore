@@ -1,0 +1,12 @@
+# git-ignore
+
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+.DS_Store
+config/config.py
+.env
+
+streamlitApp.py
